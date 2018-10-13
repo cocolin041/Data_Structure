@@ -44,7 +44,7 @@ $(EXE_PRINTER):
 %-asan:
 	$(LD) $^ $(LDFLAGS) $(ASANFLAGS) -o $@
 $(EXE_TEST): tests/basic.cpp
-	$(LD) $(patsubst %.o, $(OBJS_DIR)/%.o, $(OBJS_TEST)) tests/basic.cpp $(LDFLAGS) -o $@
+	$(LD) $(patsubst %.o, $(OBJS_DIR)/%.o, $(OBJS_TEST)) tests/basic.cpp $(LDFLAGS) -g -o $@
 
 
 # Executable dependencies
