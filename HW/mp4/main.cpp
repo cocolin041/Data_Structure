@@ -26,7 +26,34 @@ int main() {
   lastFrame.writeToFile("myFloodFill.png");
   animation.write("myFloodFill.gif");
   */
+  PNG ref;
+  // ref.readFromFile("conan.png");
+  // ref.readFromFile("darren2.png");
+  ref.readFromFile("erin.png");
 
+  unsigned int width = ref.width();
+  unsigned int height = ref.height();
+
+  PNG draw(width, height);
+  
+  FloodFilledImage image(draw);
+  BFS dfs2(draw, Point(0, 0), 100);
+
+  MyColorPicker skeching(ref, draw, "sketch");
+  image.addFloodFill( dfs2, skeching );
+  Animation animation = image.animate(4000);
+  
+  draw = animation.getFrame( animation.frameCount() - 1 );
+  // DFS dfs1(draw, Point(0, 0), 5);
+  DFS dfs1(draw, Point(0, 0), 100);
+  MyColorPicker coloring(ref, draw, "coloring");
+  image.addFloodFill( dfs1, coloring );
+
+  animation = image.animate(4000, animation);
+
+  PNG lastFrame = animation.getFrame( animation.frameCount() - 1 );
+  lastFrame.writeToFile("myFloodFill.png");
+  animation.write("myFloodFill.gif");
 
   return 0;
 }

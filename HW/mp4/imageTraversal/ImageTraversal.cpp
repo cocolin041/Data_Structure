@@ -33,16 +33,19 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
-  taversal_ = nullptr;
+  traversal_ = nullptr;
 }
+
 // on my own
-ImageTraversal::Iterator::Iterator(ImageTraversal* dfs_bfs, Point x) {
-  taversal_ = dfs_bfs;
+ImageTraversal::Iterator::Iterator(ImageTraversal* dfs_bfs, Point x, PNG png) {
+  png_ = png;
+  traversal_ = dfs_bfs;
   position_ = x;
-  for (int i = 0; i < (int)dfs_bfs->getPNG()->width(); i++) {
+
+  for (int i = 0; i < (int)dfs_bfs->png_.width(); i++) {
     std::vector<bool> visit;
     visited.push_back(visit);
-    for (int j = 0; j < (int)dfs_bfs->getPNG()->height(); j++) {
+    for (int j = 0; j < (int)dfs_bfs->png_.height(); j++) {
       visited[i].push_back(false);
     }
   }
@@ -59,10 +62,10 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   //mark the current position as visited
   visited[position_.x][position_.y] = true;
 
-  PNG * curr_image = taversal_->getPNG();
+  PNG * curr_image = &(traversal_->png_);
 
   //calculate current delta from start point
-  Point *start_position = taversal_->getStart();
+  Point *start_position = &(traversal_->start_);
   HSLAPixel start_pixel = curr_image->getPixel(start_position->x, start_position->y);
 
   //start to add neighbor points: right->below->left->above
@@ -72,50 +75,51 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
     Point* right = new Point(position_.x + 1, position_.y);
     HSLAPixel pixel = curr_image->getPixel(right->x, right->y);
     //2: check if the point is within tolerance
-    if (calculateDelta(start_pixel, pixel) < taversal_->getTolerance()) {
-      taversal_->add(*right);
+    if (calculateDelta(start_pixel, pixel) < traversal_->getTolerance()) {
+      traversal_->add(*right);
     }
   }
   if (position_.y + 1 < curr_image->height()) {
     Point* below = new Point(position_.x, position_.y + 1);
     HSLAPixel pixel = curr_image->getPixel(below->x, below->y);
-    if (calculateDelta(start_pixel, pixel) < taversal_->getTolerance()) {
-      taversal_->add(*below);
+    if (calculateDelta(start_pixel, pixel) < traversal_->getTolerance()) {
+      traversal_->add(*below);
     }
   }
   if (position_.x >= 1) {
     Point* left = new Point(position_.x - 1, position_.y);
     HSLAPixel pixel = curr_image->getPixel(left->x, left->y);
-    if (calculateDelta(start_pixel, pixel) < taversal_->getTolerance()) {
-      taversal_->add(*left);
+    if (calculateDelta(start_pixel, pixel) < traversal_->getTolerance()) {
+      traversal_->add(*left);
     }
   }
   if (position_.y >= 1) {
     Point* above = new Point(position_.x, position_.y - 1);
     HSLAPixel pixel = curr_image->getPixel(above->x, above->y);
-    if (calculateDelta(start_pixel, pixel) < taversal_->getTolerance() && position_.y >= 1) {
-      taversal_->add(*above);
+    if (calculateDelta(start_pixel, pixel) < traversal_->getTolerance() && position_.y >= 1) {
+      traversal_->add(*above);
     }  
   }
 
   //move the current position to the next position: top(DFS), front(BFS)
-  if (taversal_->empty() == false) {
-    Point move_to = taversal_->pop();
+  if (traversal_->empty() == false) {
+    Point move_to = traversal_->pop();
 
     //check if the point had been visited, if yes, pop and find the next one
-    while (visited[move_to.x][move_to.y] == true && taversal_->empty() == false) {
-      move_to = taversal_->pop();
+    while (visited[move_to.x][move_to.y] == true && traversal_->empty() == false) {
+      move_to = traversal_->pop();
     }
 
     //add a new iterator of the next point that you're moving to
-    Iterator *iter = new Iterator(taversal_, move_to);
+    // Iterator *iter = new Iterator(traversal_, move_to);
 
     //update the current position to the point "move_to"
     position_ = move_to;
-    return *iter;
+    return *this;
   } else {
-    Iterator *iter = new Iterator();
-    return *iter;
+    // Iterator *iter = new Iterator();
+    traversal_ = NULL;
+    return *this;
   }
 }
 
@@ -137,8 +141,8 @@ Point ImageTraversal::Iterator::operator*() {
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
   
-  bool v1 = (this->taversal_ == NULL) || (this->taversal_->empty());
-  bool v2 = (other.taversal_ == NULL) || (other.taversal_->empty());
+  bool v1 = (this->traversal_ == NULL) || (this->traversal_->empty());
+  bool v2 = (other.traversal_ == NULL) || (other.traversal_->empty());
 
   if (v1 != v2) {
     return true;

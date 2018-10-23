@@ -18,6 +18,7 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
+  png_ = png;
 }
 
 /**
@@ -29,6 +30,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
+  traversal_ = &traversal;
+  colorPicker_ = &colorPicker;
 }
 
 /**
@@ -53,5 +56,36 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+
+  unsigned total_pixel = png_.width() * png_.height();
+  unsigned curr_pixel = 0;
+
+  for (ImageTraversal::Iterator it = traversal_->begin(); it != traversal_->end(); ++it) {
+    if (curr_pixel % frameInterval == 0) {
+      animation.addFrame(png_);
+    }
+    HSLAPixel & pixel = png_.getPixel((*it).x, (*it).y);
+    pixel = colorPicker_->getColor((*it).x, (*it).y);
+    curr_pixel += 1;
+  }
+  animation.addFrame(png_);
+
   return animation;
+}
+Animation FloodFilledImage::animate(unsigned frameInterval, Animation animate_exist) const {
+
+  unsigned total_pixel = png_.width() * png_.height();
+  unsigned curr_pixel = 0;
+
+  for (ImageTraversal::Iterator it = traversal_->begin(); it != traversal_->end(); ++it) {
+    if (curr_pixel % frameInterval == 0) {
+      animate_exist.addFrame(png_);
+    }
+    HSLAPixel & pixel = png_.getPixel((*it).x, (*it).y);
+    pixel = colorPicker_->getColor((*it).x, (*it).y);
+    curr_pixel += 1;
+  }
+  animate_exist.addFrame(png_);
+
+  return animate_exist;
 }

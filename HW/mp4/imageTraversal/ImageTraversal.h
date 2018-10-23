@@ -28,30 +28,30 @@ public:
    * A forward iterator through an ImageTraversal.
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
-  public:
-    Iterator();
-    Iterator(ImageTraversal* dfs_bfs, Point x);
+    public:
+      Iterator();
+      Iterator(ImageTraversal* dfs_bfs, Point x, PNG png);
 
-    Iterator & operator++();
-    Point operator*();
-    bool operator!=(const Iterator &other);
+      Iterator & operator++();
+      Point operator*();
+      bool operator!=(const Iterator &other);
 
-    /** @todo [Part 1] */
-    /** add member functions if neccesary*/
-    
-    ImageTraversal* taversal_;
-    Point position_;
+      /** @todo [Part 1] */
+      /** add member functions if neccesary*/
+      //save the current position
+      Point position_;
+      ImageTraversal* traversal_;
+      PNG png_;
+      Point start_;
 
-    //save whether the pixel has been visited
-    std::vector <std::vector<bool>> visited;
+    private:
+      /** @todo [Part 1] */
+      /** add private members here if neccesary*/
 
-    
-  
-  private:
-    /** @todo [Part 1] */
-    /** add private members here if neccesary*/
-
-
+      //save whether the pixel has been visited
+      std::vector <std::vector<bool>> visited;
+      
+      
   };  
 
   /**
@@ -87,11 +87,17 @@ public:
    */
   virtual bool empty() const = 0;
 
-  virtual PNG* getPNG() const = 0;
+  // virtual PNG* getPNG() const = 0;
 
-  virtual Point* getStart() const = 0;
+  // virtual Point* getStart() const = 0;
 
   virtual double getTolerance() const = 0;
+
+
+  Point start_;
+  double tolerance_;
+  // PNG png_;
+  PNG png_;
 
 private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  

@@ -27,10 +27,14 @@ TEST_CASE("Illini I - FloodFilledImage - DFS", "[weight=3][part=2]") {
   PNG png;       png.readFromFile("tests/i.png");
   PNG expected;  expected.readFromFile("tests/i-rainbow-dfs.png");
   PNG expected2; expected2.readFromFile("tests/i-rainbow-dfs-2.png");
+
+  Point startPoint(40, 40);
   
   FloodFilledImage image(png);
   DFS dfs(png, Point(40, 40), 0.05);
+
   RainbowColorPicker rainbow(0.05);
+
   image.addFloodFill( dfs, rainbow );
 
   Animation animation = image.animate(1000);
