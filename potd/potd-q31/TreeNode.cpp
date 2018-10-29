@@ -21,25 +21,40 @@ void deleteTree(TreeNode* root)
 }
 
 int computeHeight(TreeNode* root) {
-  int height = 0;
-  int height_L = 0;
-  int height_R = 0;
+  int height_L = -1;
+  int height_R = -1;
+
   if (root == NULL) {
     return -1;
   }
-  if (root->left_ == NULL && root->right_ == NULL) {
-    return height;
-  } else {
+  else {
     if (root->left_ != NULL) {
       height_L = computeHeight(root->left_);
     }
     if (root->right_ != NULL) {
       height_R = computeHeight(root->right_);
     }
-    if (height_L > height_R) {
-      return (height_L + 1);
-    } else {
-      return (height_R + 1);
-    }
+    return std::max(height_L, height_R) + 1;
   }
+  // int height = 0;
+  // int height_L = 0;
+  // int height_R = 0;
+  // if (root == NULL) {
+  //   return -1;
+  // }
+  // if (root->left_ == NULL && root->right_ == NULL) {
+  //   return height;
+  // } else {
+  //   if (root->left_ != NULL) {
+  //     height_L = computeHeight(root->left_);
+  //   }
+  //   if (root->right_ != NULL) {
+  //     height_R = computeHeight(root->right_);
+  //   }
+  //   if (height_L > height_R) {
+  //     return (height_L + 1);
+  //   } else {
+  //     return (height_R + 1);
+  //   }
+  // }
 }

@@ -2,51 +2,43 @@
 #include <iostream>
 
 TreeNode* findLastUnbalanced(TreeNode* root) {
-  TreeNode *left_unbalance = nullptr;
-  TreeNode *right_unbalance = nullptr;
+  TreeNode* left_unbalance = nullptr;
+  TreeNode* right_unbalance = nullptr;
+  TreeNode* old_root = root;
 
-  if (root != NULL) {
-    TreeNode *unbalance = root;
-    if (isHeightBalanced(root) == false) {
-      if (root->left_ == NULL && root->right_ == NULL) {
-        return unbalance;
-      } else {
-
-        if (root->left_ != NULL) {
-          left_unbalance = root->left_;
-          if (isHeightBalanced(root->left_) == false) {
-            left_unbalance = findLastUnbalanced(root->left_);
-          } else {
-            left_unbalance = root;
-          }
-        } else {
-          left_unbalance = root;
-        }
-
-        if (root->right_ != NULL) {
-            right_unbalance = root->right_;
-          if (isHeightBalanced(root->right_) == false) {
-            right_unbalance = findLastUnbalanced(root->right_);
-          } else {
-            right_unbalance = root;
-          }
-        } else {
-          right_unbalance = root;
-        }
-
-        if (computeHeight(left_unbalance) >= computeHeight(right_unbalance)) {
-          unbalance = left_unbalance;
-        } else {
-          unbalance = right_unbalance;
-        }
-
-      }
-      
-    } else {
-      return NULL;
+  if (root == nullptr || isHeightBalanced(root) == true) {
+    return nullptr;
+  }
+  if (root->left_ != nullptr) {
+    left_unbalance = findLastUnbalanced(root->left_);
+  }
+  if (root->right_ != nullptr) {
+    right_unbalance = findLastUnbalanced(root->right_);
+  }
+  //both left and right are balanced => check if ourself is balanced
+  if (left_unbalance == nullptr && right_unbalance == nullptr) {
+    if (isHeightBalanced(root) == true) {
+      return nullptr;
     }
-  } else {
-    return NULL;
+    else {
+      return root;
+    }
+  }
+  //one of the left or right is unbalanced
+  else if (left_unbalance != nullptr && right_unbalance != nullptr) {
+    if (computeHeight(old_root) - computeHeight(left_unbalance) >= computeHeight(old_root) - computeHeight(right_unbalance)) {
+      return findLastUnbalanced(left_unbalance);
+    } else {
+      return findLastUnbalanced(right_unbalance);
+    }
+  }
+  //both of left and right are unbalanced
+  else {
+    if (left_unbalance != nullptr) {
+      return left_unbalance;
+    } else {
+      return right_unbalance;
+    }
   }
 }
 
@@ -59,33 +51,37 @@ void deleteTree(TreeNode* root)
   root = NULL;
 }
 int computeHeight(TreeNode* root) {
-  int height = 0;
-  int height_L = 0;
-  int height_R = 0;
+  int height_L = -1;
+  int height_R = -1;
+
   if (root == NULL) {
     return -1;
   }
-  if (root->left_ == NULL && root->right_ == NULL) {
-    return height;
-  } else {
+  else {
     if (root->left_ != NULL) {
       height_L = computeHeight(root->left_);
     }
     if (root->right_ != NULL) {
       height_R = computeHeight(root->right_);
     }
-    if (height_L > height_R) {
-      return (height_L + 1);
-    } else {
-      return (height_R + 1);
-    }
+    return (std::max(height_L, height_R) + 1);
   }
 }
+
 bool isHeightBalanced(TreeNode* root) {
-  int balance_factor = computeHeight(root->right_) - computeHeight(root->left_);
-  if (balance_factor <= 1 && balance_factor >= -1) {
+  int height_R = -1;
+  int height_L = -1;
+
+  if (root == nullptr) {
     return true;
   } else {
-    return false; 
+    height_R = computeHeight(root->right_);
+    height_L = computeHeight(root->left_);
+    int balance_factor = height_R - height_L;
+    if (balance_factor <= 1 && balance_factor >= -1) {
+      return true;
+    } else {
+      return false; 
+    }
   }
 }

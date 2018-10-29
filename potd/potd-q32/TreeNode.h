@@ -7,6 +7,7 @@
 struct TreeNode {
     int val_;
     int balance_;
+    // int depth_;
     TreeNode *left_;
     TreeNode *right_;
     TreeNode(int x) {
@@ -14,6 +15,7 @@ struct TreeNode {
       right_ = NULL;
       val_ = x;
       balance_ = 0;
+      // depth_ = 0;
     }
 };
 

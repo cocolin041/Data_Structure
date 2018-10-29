@@ -51,36 +51,29 @@ int main() {
  *       7 
  */
 
-  // TreeNode * root = new TreeNode(9);
-  // root->left_ = new TreeNode(5);
-  // root->right_ = new TreeNode(12);
-  // root->left_->left_ = new TreeNode(2);
-  // root->left_->right_ = new TreeNode(7);
-  // root->right_->left_ = new TreeNode(10);
-  // root->right_->right_ = new TreeNode(14);
-
-  // cout << "Before deleting a leaf: " << endl;
-  // inorderPrint(root);
-  // cout << endl;
-  // root = deleteNode(root, 14);
-  // cout << "After deleting a leaf: " << endl;
-  // inorderPrint(root);
-  // cout << endl;
-
-  // cout << "Before deleting a node with 1 child: " << endl;
-  // inorderPrint(root);
-  // cout << endl;
-  // root = deleteNode(root, 12);
-  // cout << "After deleting a node with 1 child: " << endl;
-  // inorderPrint(root);
-  // cout << endl;
-  TreeNode * root = new TreeNode(10);
+  TreeNode * root = new TreeNode(9);
   root->left_ = new TreeNode(5);
-  root->right_ = new TreeNode(15);
+  root->right_ = new TreeNode(12);
   root->left_->left_ = new TreeNode(2);
-  root->left_->right_ = new TreeNode(8);
-  root->left_->right_->left_ = new TreeNode(7);
-  root->left_->right_->right_ = new TreeNode(9);
+  root->left_->right_ = new TreeNode(7);
+  root->right_->left_ = new TreeNode(10);
+  root->right_->right_ = new TreeNode(14);
+
+  cout << "Before deleting a leaf: " << endl;
+  inorderPrint(root);
+  cout << endl;
+  root = deleteNode(root, 14);
+  cout << "After deleting a leaf: " << endl;
+  inorderPrint(root);
+  cout << endl;
+
+  cout << "Before deleting a node with 1 child: " << endl;
+  inorderPrint(root);
+  cout << endl;
+  root = deleteNode(root, 12);
+  cout << "After deleting a node with 1 child: " << endl;
+  inorderPrint(root);
+  cout << endl;
 
   cout << "Before deleting a node with 2 child: " << endl;
   inorderPrint(root);

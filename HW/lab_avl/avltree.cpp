@@ -99,7 +99,6 @@ void AVLTree<K, V>::rebalance(Node*& subtree)
       if (ComputeBalanceFactor(subtree) == 2) {
         if (factor_R == 1) {
           rotateLeft(subtree);
-          
         }
         if (factor_R == -1) {
           rotateRightLeft(subtree);
